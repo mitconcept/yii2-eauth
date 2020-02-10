@@ -184,18 +184,14 @@ abstract class Service extends ServiceBase implements IAuthService
 
 			// Can not use these params in OAuth2 callbacks
             foreach (['code', 'state', 'redirect_uri', 'scope', 'authuser', 'prompt', 'session_state', 'hd'] as $param) {
-               // foreach (['code', 'state', 'redirect_uri', 'scope'] as $param) {
-//                foreach (['code', 'state', 'redirect_uri'] as $param) {
 				if (isset($route[$param])) {
 					unset($route[$param]);
 				}
 			}
 
-			// $url = Url::to($route, true);
 			$url = Url::to($route, 'https');
 		}
 		return $url;
-//		return 'https://itc.ocg.gr/web/index.php?r=weefee%2Fconnection%2Fsociallogin&service=facebook';
 	}
 
 	/**
