@@ -176,22 +176,27 @@ abstract class Service extends ServiceBase implements IAuthService
 	{
 		if (isset($_GET['redirect_uri'])) {
 			$url = $_GET['redirect_uri'];
-		}
+        }
 		else {
 			$route = Yii::$app->getRequest()->getQueryParams();
-			array_unshift($route, '');
+
+            array_unshift($route, '');
 
 			// Can not use these params in OAuth2 callbacks
-			foreach (['code', 'state', 'redirect_uri'] as $param) {
+            //Edited by m.koumentakis (google login fixed)
+            foreach (['code', 'state', 'redirect_uri', 'scope', 'authuser', 'prompt', 'session_state', 'hd'] as $param) {
+               // foreach (['code', 'state', 'redirect_uri', 'scope'] as $param) {
+//                foreach (['code', 'state', 'redirect_uri'] as $param) {
 				if (isset($route[$param])) {
 					unset($route[$param]);
 				}
 			}
 
-			$url = Url::to($route, true);
+			// $url = Url::to($route, true);
+			$url = Url::to($route, 'https');
 		}
-
 		return $url;
+//		return 'https://itc.ocg.gr/web/index.php?r=weefee%2Fconnection%2Fsociallogin&service=facebook';
 	}
 
 	/**
@@ -212,13 +217,13 @@ abstract class Service extends ServiceBase implements IAuthService
 			if (!empty($_GET['code'])) {
 				// This was a callback request from a service, get the token
 				$proxy->requestAccessToken($_GET['code']);
-				$this->authenticated = true;
+                $this->authenticated = true;
 			} else if ($proxy->hasValidAccessToken()) {
 				$this->authenticated = true;
 			} else {
 				/** @var $url Uri */
 				$url = $proxy->getAuthorizationUri();
-				Yii::$app->getResponse()->redirect($url->getAbsoluteUri())->send();
+                Yii::$app->getResponse()->redirect($url->getAbsoluteUri())->send();
 			}
 		} catch (OAuthException $e) {
 			throw new ErrorException($e->getMessage(), $e->getCode(), 1, $e->getFile(), $e->getLine(), $e);
