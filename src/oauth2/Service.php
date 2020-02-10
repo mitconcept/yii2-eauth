@@ -183,7 +183,6 @@ abstract class Service extends ServiceBase implements IAuthService
             array_unshift($route, '');
 
 			// Can not use these params in OAuth2 callbacks
-            //Edited by m.koumentakis (google login fixed)
             foreach (['code', 'state', 'redirect_uri', 'scope', 'authuser', 'prompt', 'session_state', 'hd'] as $param) {
                // foreach (['code', 'state', 'redirect_uri', 'scope'] as $param) {
 //                foreach (['code', 'state', 'redirect_uri'] as $param) {
